@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 from flask import request
-from flask import render_template
+from flask import render_template, redirect, url_for
 
 todo_store = {}
 todo_store['depo'] = ['Depo', 'Listen Rock Music']
@@ -54,12 +54,12 @@ def create_app(test_config=None):
         # return todo_view(person_todo_list)
             return render_template('todo_view.html', todos=person_todo_list)
 
-    @app.route('/add_todos')
+    @app.route('/add_todos', methods=['POST'])
     def add_todos():
-        name = request.args.get('name')
-        todo = request.args.get('todo')
+        name = request.form.get('user_name')
+        todo = request.form.get('todo')
         add_todos_by_name(name, todo)
-        return('Added successfully')
+        return redirect(url_for('todos',name=name))
 
     @app.route('/delete_todos')
     def delete_todos():
